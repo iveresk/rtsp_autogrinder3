@@ -3,7 +3,7 @@ rtsp_authgrinder.py
 
 rtsp_authgrind.py - A quick and simple tool to brute force credentials on RTSP services and devices. This is a multi-threaded brute forcing tool for testing, assessment and audit purposes only.
 
-Copyright (C) 2014 Luke Stephens and Tek Security Group, LLC - all rights reserved
+Copyright (C) 2022 re-written for Python3, bugs and logic issues are fixed by 1vere$k. All creds go to Luke Stephens and Tek Security Group, LLC - all rights reserved.
 	
 	This program is free software: you can redistribute it and/or modify
   	it under the terms of the GNU General Public License as published by
