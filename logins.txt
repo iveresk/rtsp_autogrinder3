@@ -17,3 +17,10 @@ r00t
 Root
 root0
 root1
+webadmin
+sysadmin
+netadmin
+guest
+user
+web
+test
