@@ -94,6 +94,15 @@ def use_Basic_Auth(s):
 def use_Digest_Auth(s):
     return 'WWW-Authenticate: Digest' in s
 
+def create_login_packet(logpass, str64creds, seq):
+    COREPACKET = 'DESCRIBE rtsp://'+ logpass + '@%s RTSP/1.0\r\n' % IP
+    if seq == "2":
+        COREPACKET += 'Authorization: Basic ' + str64creds + '\r\n\r\n'
+        COREPACKET += 'CSeq: 2\r\n'
+    if seq == "1":
+        COREPACKET += 'CSeq: 1\r\n'
+    return COREPACKET
+
 def create_core_packet():
     global COREPACKET
     if len(COREPACKET) <= 0:
@@ -105,9 +114,9 @@ def create_test_packet():
     return create_core_packet() + "\r\n"
 
 def create_basic_packet(user, password):
-    ecreds = base64.b64encode(user + ":" + password)
-    setup_pkt = create_core_packet()
-    setup_pkt += 'Authorization: Basic ' + ecreds + '\r\n\r\n'
+    ecreds = base64.b64encode(bytes(user + ":" + password, "utf-8"))
+    str64creds = str(ecreds).strip("b'")
+    setup_pkt = create_login_packet(user + ":" + password, str64creds, "2")
     return setup_pkt
 
 def create_digest_packet(user, password):
@@ -181,10 +190,10 @@ def perform_rtsp_auth(list):
         s.setblocking(False)
         for pair in list:
             print ("attempting to connect to " + str(IP) + " on port " + str(PORT))
-            user = pair[0]
-            password = pair[1]
+            user = list[0]
+            password = list[1]
             print ("doing pair " + str(user) + "," + str(password))
-            pkt = create_basic_packet(user, password)
+            pkt = create_login_packet(user + ":" + password, user + ":" + password, "1")
             print(pkt)
             s.sendall(bytes(pkt, 'utf-8'))
             print ("Packet sent")
